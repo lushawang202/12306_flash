@@ -9,15 +9,15 @@ class Base:
     _driver = None
     _url = ""
 
-    def __init__(self, driver: WebDriver = None):
+    def __init__(self, driver):
 
         if driver is None:
             options = Options()
             options.debugger_address = '127.0.0.1:9222'
             self._driver = webdriver.Chrome(options=options)
-        elif driver is 'firefox':
+        elif driver == 'firefox':
             self._driver = webdriver.Firefox()
-        elif driver is 'chrome':
+        elif driver == 'chrome':
             self._driver = webdriver.Chrome()
         else:
             self._driver = driver

@@ -67,15 +67,16 @@ class Auto_Login(Base):
                 self.action.move_to_element(self.img_ele).move_by_offset(self._coordinate[i][0],
                                                                          self._coordinate[i][1]).click()
             self.action.perform()
-            try:
-                self.find(By.ID, 'J-login').click()
-            except ElementClickInterceptedException:
-
-                # if self.finds(By.LINK_TEXT, '请选择验证码！'):
-                print('验证码选择失败，即将重试')
-                self._driver.refresh()
-            else:
+            self.find(By.ID, 'J-login').click()
+            if self.find(By.ID, 'nc_1_n1z').is_displayed():
                 break
+            elif self.find(By.LINK_TEXT, '密码长度不能少于6位！').is_displayed():
+                print("密码长度不能少于6位！")
+                self._driver.save_screenshot('./密码太短.png')
+                raise Exception
+            else:
+                print('验证码选择失败，即将重试')
+                self.find(By.CSS_SELECTOR, '.lgcode-refresh').click()
 
         # def slide(self):
         while True:
@@ -94,6 +95,7 @@ class Auto_Login(Base):
                 raise Exception
         if self.finds(By.XPATH, '//*[contains(text(),"密码输入错误。如果输错次数超过4次，用户将被锁定。")]'):
             print('用户名或密码错误。')
+            self._driver.save_screenshot('./用户名或密码错误.png')
             raise Exception
         else:
             return Ticket(self._driver)
