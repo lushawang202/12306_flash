@@ -57,12 +57,13 @@ class Ticket(Base):
                             raise Exception
 
                 elif flag:
-                    if self.finds(By.CSS_SELECTOR, '.i-no'):
+                    ele = self.find(By.CSS_SELECTOR, '.i-no')
+                    if ele.is_displayed():
                         break
                     else:
                         count += 1
                         if count == len(trains):
-                            print('没有找到指定车次')
+                            print('我不想再继续了，因为当前搜索没有你说的车。')
                             raise Exception
 
             self.find(By.ID, 'query_ticket').click()

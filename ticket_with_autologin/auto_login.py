@@ -79,18 +79,21 @@ class Auto_Login(Base):
 
         # def slide(self):
         while True:
-            action_chains = ActionChains(self._driver)
-            start = self.find(By.ID, 'nc_1_n1z')
-            action_chains.click_and_hold(start).move_by_offset(340, 0).pause(0.1).release().perform()
-            if self.finds(By.LINK_TEXT, '刷新'):
-                self.find(By.LINK_TEXT, '刷新').click()
-            elif self.finds(By.LINK_TEXT, '确定'):
-                self.find(By.LINK_TEXT, '确定').click()
-                break
-            else:
-                break
+            try:
+                action_chains = ActionChains(self._driver)
+                start = self.find(By.ID, 'nc_1_n1z')
+                action_chains.click_and_hold(start).move_by_offset(340, 0).pause(0.1).release().perform()
+                if self.finds(By.LINK_TEXT, '刷新'):
+                    self.find(By.LINK_TEXT, '刷新').click()
+                elif self.finds(By.LINK_TEXT, '确定'):
+                    self.find(By.LINK_TEXT, '确定').click()
+                    break
+            except Exception:
+                self._driver.save_screenshot('./验证失败.png')
+                print('滚动条验证失败')
+                raise Exception
         if self.finds(By.XPATH, '//*[contains(text(),"密码输入错误。如果输错次数超过4次，用户将被锁定。")]'):
-            print('密码验证失败')
+            print('用户名或密码错误。')
             raise Exception
         else:
             return Ticket(self._driver)
