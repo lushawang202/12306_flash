@@ -63,7 +63,7 @@ class Ticket(Base):
                     else:
                         count += 1
                         if count == len(trains):
-                            print('我不想再继续了，因为当前搜索没有你说的车。')
+                            print('\n我不想再继续了，因为当前搜索没有你说的车。')
                             raise Exception
 
             self.find(By.ID, 'query_ticket').click()
