@@ -9,7 +9,7 @@ class Base:
     _driver = None
     _url = ""
 
-    def __init__(self, driver):
+    def __init__(self, driver: WebDriver = None):
 
         if driver is None:
             options = Options()

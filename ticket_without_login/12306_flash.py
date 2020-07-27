@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from common.ticket import Ticket
+from page.ticket import Ticket
 if __name__ == '__main__':
     print(
         '\n注：非自动登录只支持Chrome debug模式，请确认已打开Chrome调试模式。\n'

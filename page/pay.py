@@ -4,9 +4,8 @@
 import winsound
 
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.select import Select
 
-from common.base import Base
+from page.base import Base
 
 
 class Pay(Base):

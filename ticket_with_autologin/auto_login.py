@@ -6,14 +6,13 @@
 import base64
 import re
 import requests
-from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
-from common.base import Base
-from common.ticket import Ticket
+from page.base import Base
+from page.ticket import Ticket
 
 
 class Auto_Login(Base):
@@ -68,9 +67,9 @@ class Auto_Login(Base):
                                                                          self._coordinate[i][1]).click()
             self.action.perform()
             self.find(By.ID, 'J-login').click()
-            if self.find(By.ID, 'nc_1_n1z').is_displayed():
+            if self.finds(By.ID, 'nc_1_n1z'):
                 break
-            elif self.find(By.LINK_TEXT, '密码长度不能少于6位！').is_displayed():
+            elif self.finds(By.XPATH, '//*[contains(text(),"密码长度不能少于6位")]'):
                 print("密码长度不能少于6位！")
                 self._driver.save_screenshot('./密码太短.png')
                 raise Exception
@@ -85,20 +84,21 @@ class Auto_Login(Base):
                 start = self.find(By.ID, 'nc_1_n1z')
                 action_chains.click_and_hold(start).move_by_offset(340, 0).pause(0.1).release().perform()
                 if self.finds(By.LINK_TEXT, '刷新'):
+                    self._driver.implicitly_wait(1)
                     self.find(By.LINK_TEXT, '刷新').click()
+                    self._driver.implicitly_wait(5)
                 elif self.finds(By.LINK_TEXT, '确定'):
                     self.find(By.LINK_TEXT, '确定').click()
                     break
+                elif self.finds(By.XPATH, '//*[text()="个人中心"]'):
+                    break
+                else:
+                    raise Exception
             except Exception:
                 self._driver.save_screenshot('./验证失败.png')
                 print('滚动条验证失败')
                 raise Exception
-        if self.finds(By.XPATH, '//*[contains(text(),"密码输入错误。如果输错次数超过4次，用户将被锁定。")]'):
-            print('用户名或密码错误。')
-            self._driver.save_screenshot('./用户名或密码错误.png')
-            raise Exception
-        else:
-            return Ticket(self._driver)
+        return Ticket(self._driver)
 
     def quit(self):
         self._driver.quit()
