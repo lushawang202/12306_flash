@@ -57,7 +57,7 @@ class Ticket(Base):
                             raise Exception
 
                 elif flag:
-                    if not self.finds(By.CSS_SELECTOR, '#float'):
+                    if self.finds(By.XPATH, '//*[contains(text(),"稍后再试")]'):
                         break
                     else:
                         count += 1
