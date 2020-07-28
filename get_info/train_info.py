@@ -26,8 +26,8 @@ with shelve.open('./info') as db:
     else:
         time_period = ''
     train = input(f"哪（几）个车？多个用空格隔开（默认为{db['train']}）:")
-    who = input(f"谁坐呀？（默认{db['who']}）")
-    seat = input(f"什么坐席？（默认{db['seat']}）")
+    who = input(f"谁坐呀？（默认{db['who']}）：")
+    seat = input(f"什么坐席？（默认{db['seat']}）：")
     info_list = ['start', 'end', 'date', 'time_period', 'train', 'who', 'seat']
     count = 0
 
