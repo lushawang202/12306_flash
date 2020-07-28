@@ -41,7 +41,7 @@ class Ticket(Base):
                 for train in trains:
                     if self.finds(By.XPATH, f'//*[text()="{train}"]'):
                         self.available_trains.append(train)
-                        print(self.available_trains)
+                print(f"查询到可用车次：{self.available_trains}，刷票中...")
                 self.implicitly_wait(8)
                 break
             elif self.find(By.XPATH, '//*[contains(text(),"稍后再试")]').is_displayed():
@@ -70,7 +70,7 @@ class Ticket(Base):
                         else:
                             if self.find(By.ID, 'submitOrder_id').is_displayed():
                                 winsound.Beep(600, 1000)
-                                print("恭喜小主抢到啦！快去付款吧~")
+                                print(f"恭喜小主抢到{train}啦！快去付款吧~")
                                 return Pay(self._driver)
                             else:
                                 self.screen_shot('./订票跳转失败.png')
