@@ -43,11 +43,13 @@ class Ticket(Base):
             count = 0
             flag = 1
             for train in trains:
+                self._driver.implicitly_wait(0.5)
                 if self.finds(By.XPATH, f'//a[text()="{train}"]'):
                     flag = 0
                     if self.find(By.XPATH, f'//a[text()="{train}"]/../../../../../td[4]').text != '候补':
                         self.find(By.XPATH, f'//a[text()="{train}"]/../../../../../td[last()]').click()
                         try:
+                            self._driver.implicitly_wait(8)
                             self.find(By.ID, 'submitOrder_id')
                             winsound.Beep(600, 1000)
                             print("恭喜小主抢到啦！快去付款吧~")
@@ -57,7 +59,7 @@ class Ticket(Base):
                             raise Exception
 
                 elif flag:
-                    if self.finds(By.XPATH, '//*[contains(text(),"稍后再试")]'):
+                    if self.find(By.XPATH, '//*[contains(text(),"稍后再试")]').is_displayed():
                         break
                     else:
                         count += 1
