@@ -25,14 +25,9 @@ class Auto_Login(Base):
         self._password = password
 
     def auto_login(self):
-        # 账号登录到滑动验证之前
-        while True:
-            # WebDriverWait(self._driver, 3).until(expected_conditions.element_to_be_clickable((By.LINK_TEXT, '账号登录')))
-            self.find(By.LINK_TEXT, '账号登录').click()
-            if expected_conditions.element_to_be_clickable((self.finds(By.LINK_TEXT, '铁路12306'))):
-                break
-            else:
-                self._driver.refresh()
+        # 用户名、密码输入
+        WebDriverWait(self._driver, 3).until(expected_conditions.element_to_be_clickable((By.LINK_TEXT, '账号登录')))
+        self.find(By.LINK_TEXT, '账号登录').click()
 
         self.find(By.ID, 'J-userName').send_keys(f'{self._username}')
         self.find(By.ID, 'J-password').send_keys(f'{self._password}')
@@ -92,6 +87,9 @@ class Auto_Login(Base):
                     break
                 elif self.finds(By.XPATH, '//*[text()="个人中心"]'):
                     break
+                elif self.finds(By.XPATH, '//*[contains(text(),"密码输入错误")]'):
+                    print('密码输入错误。')
+                    raise Exception
                 else:
                     raise Exception
             except Exception:
