@@ -18,6 +18,7 @@ class Pay(Base):
                 select = self.find(By.ID, 'seatType_1')
                 select.find_element(By.XPATH, f'//option[contains(text(), "{seat}")]').click()
                 self.find(By.ID, 'submitOrder_id').click()
+                self.find(By.ID, 'qr_submit_id').click()
                 break
             except NoSuchElementException:
                 if self.finds(By.XPATH, '//*[text(),"确定"]'):
