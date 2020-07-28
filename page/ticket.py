@@ -9,8 +9,8 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support.wait import WebDriverWait
 
-from common.base import Base
-from common.pay import Pay
+from page.base import Base
+from page.pay import Pay
 
 
 class Ticket(Base):
@@ -57,8 +57,7 @@ class Ticket(Base):
                             raise Exception
 
                 elif flag:
-                    ele = self.find(By.CSS_SELECTOR, '.i-no')
-                    if ele.is_displayed():
+                    if self.finds(By.XPATH, '//*[contains(text(),"稍后再试")]'):
                         break
                     else:
                         count += 1

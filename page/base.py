@@ -9,7 +9,7 @@ class Base:
     _driver = None
     _url = ""
 
-    def __init__(self, driver):
+    def __init__(self, driver: WebDriver = None):
 
         if driver is None:
             options = Options()
@@ -24,7 +24,7 @@ class Base:
         if self._url != "":
             self._driver.get(self._url)
         self._driver.maximize_window()
-        self._driver.implicitly_wait(5)
+        self._driver.implicitly_wait(8)
 
     def find(self, by, value):
         return self._driver.find_element(by, value)
