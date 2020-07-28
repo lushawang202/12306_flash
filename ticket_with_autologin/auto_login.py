@@ -31,7 +31,7 @@ class Auto_Login(Base):
 
         # def img_verify(self):
         while True:
-            WebDriverWait(self._driver, 3).until(
+            WebDriverWait(self._driver, 10).until(
                 expected_conditions.invisibility_of_element((By.CSS_SELECTOR, '.lgcode-loading')))
             img_ele = self.find(By.ID, 'J-loginImg')
             base64_str = img_ele.get_attribute("src").split(",")[-1]
@@ -75,10 +75,9 @@ class Auto_Login(Base):
                 action_chains = ActionChains(self._driver)
                 start = self.find(By.ID, 'nc_1_n1z')
                 action_chains.click_and_hold(start).move_by_offset(340, 0).pause(0.1).release().perform()
+                self._driver.implicitly_wait(2)
                 if self.finds(By.LINK_TEXT, '刷新'):
-                    self._driver.implicitly_wait(1)
                     self.find(By.LINK_TEXT, '刷新').click()
-                    self._driver.implicitly_wait(5)
                 elif self.finds(By.LINK_TEXT, '确定'):
                     self.find(By.LINK_TEXT, '确定').click()
                     break
@@ -89,11 +88,9 @@ class Auto_Login(Base):
                     raise Exception
                 else:
                     raise Exception
+                self._driver.implicitly_wait(8)
             except Exception:
                 self._driver.save_screenshot('./验证失败.png')
                 print('滚动条验证失败')
                 raise Exception
         return Ticket(self._driver)
-
-    def quit(self):
-        self._driver.quit()
