@@ -3,11 +3,7 @@
 import base64
 import re
 import requests
-from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.wait import WebDriverWait
-
 from page.base import Base
 from page.ticket import Ticket
 
@@ -23,7 +19,7 @@ class Auto_Login(Base):
 
     def auto_login(self):
         # 用户名、密码输入
-        WebDriverWait(self._driver, 3).until(expected_conditions.element_to_be_clickable((By.LINK_TEXT, '账号登录')))
+        self.wait_to_click(3, (By.LINK_TEXT, '账号登录'))
         self.find(By.LINK_TEXT, '账号登录').click()
 
         self.find(By.ID, 'J-userName').send_keys(f'{self._username}')
@@ -31,8 +27,7 @@ class Auto_Login(Base):
 
         # def img_verify(self):
         while True:
-            WebDriverWait(self._driver, 10).until(
-                expected_conditions.invisibility_of_element((By.CSS_SELECTOR, '.lgcode-loading')))
+            self.wait_to_invisible(10, (By.CSS_SELECTOR, '.lgcode-loading'))
             img_ele = self.find(By.ID, 'J-loginImg')
             base64_str = img_ele.get_attribute("src").split(",")[-1]
             imgdata = base64.b64decode(base64_str)
@@ -53,17 +48,17 @@ class Auto_Login(Base):
                 continue
             self.result = result
             # def moveAndClick(self):
-            self.action = ActionChains(self._driver)
+            action_chains = self.action_chains()
             for i in self.result:
-                self.action.move_to_element(self.img_ele).move_by_offset(self._coordinate[i][0],
-                                                                         self._coordinate[i][1]).click()
-            self.action.perform()
+                action_chains.move_to_element(self.img_ele).move_by_offset(self._coordinate[i][0],
+                                                                                  self._coordinate[i][1]).click()
+            action_chains.perform()
             self.find(By.ID, 'J-login').click()
             if self.finds(By.ID, 'nc_1_n1z'):
                 break
             elif self.finds(By.XPATH, '//*[contains(text(),"密码长度不能少于6位")]'):
                 print("密码长度不能少于6位！")
-                self._driver.save_screenshot('./密码太短.png')
+                self.screen_shot('./密码太短.png')
                 raise Exception
             else:
                 print('验证码选择失败，即将重试')
@@ -72,10 +67,9 @@ class Auto_Login(Base):
         # def slide(self):
         while True:
             try:
-                action_chains = ActionChains(self._driver)
                 start = self.find(By.ID, 'nc_1_n1z')
-                action_chains.click_and_hold(start).move_by_offset(340, 0).pause(0.1).release().perform()
-                self._driver.implicitly_wait(2)
+                self.action_chains().click_and_hold(start).move_by_offset(340, 0).pause(0.1).release().perform()
+                self.implicitly_wait(2)
                 if self.finds(By.LINK_TEXT, '刷新'):
                     self.find(By.LINK_TEXT, '刷新').click()
                 elif self.finds(By.LINK_TEXT, '确定'):
@@ -88,9 +82,9 @@ class Auto_Login(Base):
                     raise Exception
                 else:
                     raise Exception
-                self._driver.implicitly_wait(8)
+                self.implicitly_wait(8)
             except Exception:
-                self._driver.save_screenshot('./验证失败.png')
+                self.screen_shot('./验证失败.png')
                 print('滚动条验证失败')
                 raise Exception
         return Ticket(self._driver)
