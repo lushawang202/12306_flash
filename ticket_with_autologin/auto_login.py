@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import base64
 import re
+import shelve
 import requests
 from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.webdriver.common.by import By
@@ -12,11 +13,11 @@ from page.ticket import Ticket
 class Auto_Login(Base):
     _url = 'https://kyfw.12306.cn/otn/resources/login.html'
     _coordinate = [[-105, -20], [-35, -20], [40, -20], [110, -20], [-105, 50], [-35, 50], [40, 50], [110, 50]]
-
-    def __init__(self, driver, username, password):
-        super().__init__(driver)
-        self._username = username
-        self._password = password
+    with shelve.open('./info') as db:
+        def __init__(self, driver, username=db['self._username'], password=db['self._password']):
+            super().__init__(driver)
+            self._username = username
+            self._password = password
 
     def auto_login(self):
         # 用户名、密码输入
@@ -52,7 +53,7 @@ class Auto_Login(Base):
             action_chains = self.action_chains()
             for i in self.result:
                 action_chains.move_to_element(self.img_ele).move_by_offset(self._coordinate[i][0],
-                                                                                  self._coordinate[i][1]).click()
+                                                                           self._coordinate[i][1]).click()
             action_chains.perform()
             try:
                 self.find(By.ID, 'J-login').click()
