@@ -49,8 +49,6 @@ class Smart_train:
                     self.time_period = '18:00--24:00'
                 elif time_period_mark == '0':
                     self.time_period = '00:00--24:00'
-                else:
-                    self.time_period = '00:00--24:00'
                 self.train = input(f"哪（几）个车？多个用空格隔开（默认为{db['self.train']}）:")
                 self.who = input(f"谁坐呀？（默认{db['self.who']}）：")
                 self.seat = input(f"什么坐席？（默认{db['self.seat']}）：")
