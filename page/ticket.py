@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from page.base import Base
@@ -55,43 +56,52 @@ class Ticket(Base):
             else:
                 return False
 
-    def get_ticket(self):
+    def get_ticket(self, seat):
+        seat_number = None
         for train in self.available_trains:
-            rest = self.find(By.XPATH, f'//a[text()="{train}"]/../../../../../td[4]').text
-            try:
-                if rest != '候补':
-                    print(f"{train}[0]余票：{rest}")
+            if seat == '二等座':
+                seat_number = 4
+            elif seat == '一等座':
+                seat_number = 3
+            elif seat == '软卧':
+                seat_number = 6
+            elif seat == '硬卧':
+                seat_number = 8
+            elif seat == '软座':
+                seat_number = 9
+            elif seat == '硬座':
+                seat_number = 10
+            rest = self.find(By.XPATH, f'//a[text()="{train}"]/../../../../../td[{seat_number}]').text
+            if rest != '无' and rest != '候补' and rest != '--':
+                try:
+                    print(f"{train}余票：{rest}")
                     self.find(By.XPATH, f'//a[text()="{train}"]/../../../../../td[last()]').click()
                     return self.goto_pay()
-                else:
+                except Exception:
+                    self.screen_shot('./订票异常.png')
                     return False
-            except Exception:
-                self.screen_shot('./订票跳转失败.png')
-                print("抢票失败，错误截图已保存为：订票跳转失败.png")
-                raise Exception
+            else:
+                return False
 
     def goto_pay(self):
-        self.wait_ele_not_clickable(10, (By.LINK_TEXT, '中国铁路12306'))
-        self.implicitly_wait(0.2)
-        if self.finds(By.XPATH, '//div[contains(text(),"您选择的列车距开车时间很近了")]'):
-            self.wait_ele_clickable(5, (By.ID, 'qd_closeDefaultWarningWindowDialog_id'))
-            self.find(By.ID, 'qd_closeDefaultWarningWindowDialog_id').click()
-            return Pay(self._driver)
-        elif self.finds(By.ID, 'submitOrder_id'):
-            return Pay(self._driver)
-        elif self.finds(By.XPATH, '//*[contains(text(), "当前时间不可以订票")]'):
-            print('抢票失败：查询到可用车票，但是当前时间不可以订票。')
-            return False
-        elif self.finds(By.ID, 'content_defaultwarningAlert_hearder'):
-            print('无法订票，因为有未处理的订单')
-            raise Exception
-        else:
-            try:
-                from ticket_with_autologin.auto_login import Auto_Login
-                Auto_Login(self._driver).auto_login()
-                return self.goto_pay()
-            except Exception:
-                self.screen_shot('./订票跳转失败.png')
-                print("抢票失败，错误截图已保存为：订票跳转失败.png")
+        while True:
+            self.implicitly_wait(0.1)
+            if self.finds(By.XPATH, '//div[contains(text(),"您选择的列车距开车时间很近了")]'):
+                self.wait_ele_clickable(5, (By.ID, 'qd_closeDefaultWarningWindowDialog_id'))
+                self.find(By.ID, 'qd_closeDefaultWarningWindowDialog_id').click()
+                return Pay(self._driver)
+            elif self.finds(By.ID, 'submitOrder_id'):
+                return Pay(self._driver)
+            elif self.finds(By.XPATH, '//*[contains(text(), "当前时间不可以订票")]'):
+                print('抢票失败：查询到可用车票，但是当前时间不可以订票。')
+                return False
+            elif self.finds(By.ID, 'content_defaultwarningAlert_hearder'):
+                print('无法订票，因为有未处理的订单')
                 raise Exception
-
+            elif self.finds(By.CSS_SELECTOR, '.modal-login'):
+                self.refresh()
+                # from ticket_with_autologin.auto_login import Auto_Login
+                # Auto_Login(self._driver).auto_login()
+                return self.goto_pay()
+            else:
+                continue
