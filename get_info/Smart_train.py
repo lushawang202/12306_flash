@@ -13,15 +13,15 @@ class Smart_train:
             self.time_period = db['self.time_period']
             self.who = db['self.who']
             self.seat = db['self.seat']
-            self.smart_mark = input(f'是否一键读取上次信息？\n{self.date}\n起点：{self.start}\n'
-                                    f'终点：{self.end}\n车次：{self.train}\n时间段：{self.time_period}\n'
-                                    f'姓名：{self.who}\n坐席：{self.seat}\n回车默认，按1重新录入：')
 
     def if_smart_train(self):
         while True:
-            if self.smart_mark == '':
+            smart_mark = input(f'是否一键读取上次信息？\n{self.date}\n起点：{self.start}\n'
+                               f'终点：{self.end}\n车次：{self.train}\n时间段：{self.time_period}\n'
+                               f'姓名：{self.who}\n坐席：{self.seat}\n回车默认，按1重新录入：')
+            if smart_mark == '':
                 return self
-            elif self.smart_mark == '1':
+            elif smart_mark == '1':
                 return self.get_train_info()
             else:
                 print('咦？手误了吗？')

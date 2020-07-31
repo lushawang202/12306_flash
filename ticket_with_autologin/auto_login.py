@@ -3,6 +3,7 @@
 import base64
 import re
 import requests
+from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.webdriver.common.by import By
 from page.base import Base
 from page.ticket import Ticket
@@ -19,7 +20,7 @@ class Auto_Login(Base):
 
     def auto_login(self):
         # 用户名、密码输入
-        self.wait_to_click(3, (By.LINK_TEXT, '账号登录'))
+        self.wait_ele_clickable(3, (By.LINK_TEXT, '账号登录'))
         self.find(By.LINK_TEXT, '账号登录').click()
 
         self.find(By.ID, 'J-userName').send_keys(f'{self._username}')
@@ -53,16 +54,20 @@ class Auto_Login(Base):
                 action_chains.move_to_element(self.img_ele).move_by_offset(self._coordinate[i][0],
                                                                                   self._coordinate[i][1]).click()
             action_chains.perform()
-            self.find(By.ID, 'J-login').click()
-            if self.finds(By.ID, 'nc_1_n1z'):
-                break
-            elif self.finds(By.XPATH, '//*[contains(text(),"密码长度不能少于6位")]'):
-                print("密码长度不能少于6位！")
-                self.screen_shot('./密码太短.png')
-                raise Exception
-            else:
-                print('验证码选择失败，即将重试')
-                self.find(By.CSS_SELECTOR, '.lgcode-refresh').click()
+            try:
+                self.find(By.ID, 'J-login').click()
+                if self.finds(By.ID, 'nc_1_n1z'):
+                    break
+                elif self.finds(By.XPATH, '//*[contains(text(),"密码长度不能少于6位")]'):
+                    print("密码长度不能少于6位！")
+                    self.screen_shot('./密码太短.png')
+                    raise Exception
+                else:
+                    print('验证码选择失败，即将重试')
+                    self.find(By.CSS_SELECTOR, '.lgcode-refresh').click()
+            except ElementClickInterceptedException:
+                self.refresh()
+                continue
 
         # def slide(self):
         while True:
@@ -84,7 +89,7 @@ class Auto_Login(Base):
                     raise Exception
                 self.implicitly_wait(8)
             except Exception:
-                self.screen_shot('./验证失败.png')
-                print('滚动条验证失败')
+                self.screen_shot('./登录失败.png')
+                print('登录失败')
                 raise Exception
         return Ticket(self._driver)

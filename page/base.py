@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from selenium import webdriver
+from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.remote.webdriver import WebDriver
@@ -44,14 +45,22 @@ class Base:
     def implicitly_wait(self, time):
         self._driver.implicitly_wait(time)
 
-    def click_till_jump(self, by, locator):
-        while True:
-            self.find(by, locator).click()
-            if len(self.finds(by, locator)) == 0:
-                break
+    def click_till_see(self, by, locator, aim_by, aim_locator):
+        try:
+            while True:
+                self.find(by, locator).click()
+                if self.finds(aim_by, aim_locator):
+                    return True
+                else:
+                    continue
+        except ElementClickInterceptedException:
+            return self
 
-    def wait_to_click(self, time: float, locator):
+    def wait_ele_clickable(self, time, locator):
         WebDriverWait(self._driver, time).until(expected_conditions.element_to_be_clickable(locator))
+
+    def wait_ele_not_clickable(self, time, locator):
+        WebDriverWait(self._driver, time).until(expected_conditions.element_to_be_not_clickable(locator))
 
     def wait_to_invisible(self, time, locator):
         WebDriverWait(self._driver, time).until(expected_conditions.invisibility_of_element(locator))

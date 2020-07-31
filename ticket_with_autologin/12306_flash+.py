@@ -2,13 +2,20 @@
 # -*- coding: utf-8 -*-
 
 # 自动登录，查票，买票，加浏览器选择
-from ticket_with_autologin.auto_login import Auto_Login
+from get_info.info_to_login import Info_to_login
 
 if __name__ == '__main__':
     print('O(∩_∩)O全自动抢票小助手为您服务！请填写信息开始抢票（直接回车表示默认）。')
-    from get_info.train_repeat import *
-    from get_info.user_info import *
-    from get_info.browser_info import *
-    print('请稍后，即将开始抢票！')
-    auto_login = Auto_Login(driver, username, password)
-    auto_login.auto_login().check_ticket(start, end, date, time_period).buy_ticket(train).pay(who, seat)
+    info = Info_to_login()
+    ready_to_ticket = info.goto_login().auto_login().type_info(info.start, info.end, info.date, info.time_period)
+    has_available_train = ready_to_ticket.query_ok().acquire_available_train(info.train)
+    if has_available_train:
+        while ready_to_ticket.query_ok():
+            get_ticket = ready_to_ticket.get_ticket()
+            if get_ticket:
+                get_ticket.pay(info.who, info.seat)
+                break
+            else:
+                continue
+    else:
+        print('查询的列车不存在，请检查相关信息。')
