@@ -3,7 +3,7 @@
 from get_info.account_info import Account_info
 from get_info.browser import Browser
 from get_info.Smart_train import Smart_train
-from ticket_with_autologin.auto_login import Auto_Login
+from page.auto_login import Auto_Login
 
 
 class Info_to_login:

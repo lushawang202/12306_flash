@@ -23,7 +23,6 @@ class Auto_Login(Base):
         # 用户名、密码输入
         self.wait_ele_clickable(3, (By.LINK_TEXT, '账号登录'))
         self.find(By.LINK_TEXT, '账号登录').click()
-
         self.find(By.ID, 'J-userName').send_keys(f'{self._username}')
         self.find(By.ID, 'J-password').send_keys(f'{self._password}')
 
@@ -32,10 +31,9 @@ class Auto_Login(Base):
             self.wait_to_invisible(10, (By.CSS_SELECTOR, '.lgcode-loading'))
             img_ele = self.find(By.ID, 'J-loginImg')
             base64_str = img_ele.get_attribute("src").split(",")[-1]
-            imgdata = base64.b64decode(base64_str)
+            img_data = base64.b64decode(base64_str)
             with open('verify.jpg', 'wb') as file:
-                file.write(imgdata)
-            self.img_ele = img_ele
+                file.write(img_data)
             # def getVerifyResult(self):
             url = "http://littlebigluo.qicp.net:47720/"
             response = requests.request("POST", url, data={"type": "1"}, files={
@@ -48,12 +46,11 @@ class Auto_Login(Base):
             except Exception as e:
                 print("图像处理服务器繁忙，即将尝试")
                 continue
-            self.result = result
             # def moveAndClick(self):
             action_chains = self.action_chains()
-            for i in self.result:
-                action_chains.move_to_element(self.img_ele).move_by_offset(self._coordinate[i][0],
-                                                                           self._coordinate[i][1]).click()
+            for i in result:
+                action_chains.move_to_element(img_ele).move_by_offset(self._coordinate[i][0],
+                                                                      self._coordinate[i][1]).click()
             action_chains.perform()
             try:
                 self.find(By.ID, 'J-login').click()
