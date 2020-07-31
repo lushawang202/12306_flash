@@ -33,8 +33,11 @@ class Ticket(Base):
 
     def query_ok(self):
         self.implicitly_wait(3)
-        self.click_till_see(By.ID, 'query_ticket', By.CSS_SELECTOR, '.start-s')
-        return self
+        while True:
+            self.wait_ele_clickable(5, (By.CSS_SELECTOR, '#wf'))
+            self.find(By.ID, 'query_ticket').click()
+            if self.find(By.ID, 'float').is_displayed():
+                return self
 
     # 获得可用车次
     def acquire_available_train(self, trains):
