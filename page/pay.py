@@ -16,10 +16,9 @@ class Pay(Base):
             self.wait_ele_clickable(5, (By.ID, 'submitOrder_id'))
             self.find(By.ID, 'submitOrder_id').click()
             self.wait_ele_clickable(5, (By.ID, 'qr_submit_id'))
-            self.find(By.ID, 'qr_submit_id').click()
-            # self.click_till_see(By.ID, 'qr_submit_id', By.XPATH, '//*[contains(text(),"请稍等")]')
             self.implicitly_wait(0.1)
             while True:
+                self.find(By.ID, 'qr_submit_id').click()
                 if self.finds(By.LINK_TEXT, '失败!'):
                     self.screen_shot('./订票失败.png')
                     print("订票失败，详情请查看：订票失败.png")
