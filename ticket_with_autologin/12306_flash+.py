@@ -11,7 +11,7 @@ if __name__ == '__main__':
     has_available_train = ready_to_ticket.query_ok().acquire_available_train(info.train)
     if has_available_train:
         while ready_to_ticket.query_ok():
-            get_ticket = ready_to_ticket.get_ticket()
+            get_ticket = ready_to_ticket.get_ticket(info.seat)
             if get_ticket:
                 get_ticket.pay(info.who, info.seat)
                 break
