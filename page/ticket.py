@@ -36,7 +36,7 @@ class Ticket(Base):
         while True:
             self.wait_ele_clickable(5, (By.CSS_SELECTOR, '#wf'))
             self.find(By.ID, 'query_ticket').click()
-            if self.find(By.ID, 'float').is_displayed():
+            if self.find(By.ID, 'wf').is_enabled():
                 return self
 
     # 获得可用车次
