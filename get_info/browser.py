@@ -6,7 +6,7 @@ import shelve
 class Browser:
     def __init__(self):
         with shelve.open('./info') as db:
-            self.driver_mark = input(f"请输入要使用的浏览器（默认为{db['self._driver']}）\n1：firefox\n2：chrome\n")
+            self.driver_mark = input(f"请输入要使用的浏览器（默认为{db['self._driver']}）\n1：firefox\n2：chrome\n：")
             self.driver = db['self._driver']
 
     def choose_browser(self):

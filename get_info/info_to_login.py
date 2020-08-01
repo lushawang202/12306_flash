@@ -16,11 +16,15 @@ class Info_to_login:
         self.time_period = train_info.time_period
         self.who = train_info.who
         self.seat = train_info.seat
+        self._username = None
+        self._password = None
+        self._browser = Browser().choose_browser()
+
+    def get_account(self):
         get_account_info = Account().get_account_info()
         self._username = get_account_info.username
         self._password = get_account_info.password
-        self._browser = Browser().choose_browser()
-        print('请稍后，即将开始抢票！')
+        return self
 
     def goto_login(self):
         return Auto_Login(self._browser, self._username, self._password)
