@@ -4,7 +4,7 @@ import getpass
 import shelve
 
 
-class Account_info:
+class Account:
     def __init__(self):
         with shelve.open('./info') as db:
             self.account_repeat = input(f'是否使用账号{db["self._username"]}登录？回车默认，按1重新录入')

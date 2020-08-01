@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from get_info.account_info import Account_info
+from get_info.account import Account
 from get_info.browser import Browser
 from get_info.Smart_train import Smart_train
 from page.auto_login import Auto_Login
@@ -16,7 +16,7 @@ class Info_to_login:
         self.time_period = train_info.time_period
         self.who = train_info.who
         self.seat = train_info.seat
-        get_account_info = Account_info().get_account_info()
+        get_account_info = Account().get_account_info()
         self._username = get_account_info.username
         self._password = get_account_info.password
         self._browser = Browser().choose_browser()
