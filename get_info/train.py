@@ -3,7 +3,7 @@
 import shelve
 
 
-class Smart_train:
+class Train:
     def __init__(self):
         with shelve.open('./info') as db:
             self.start = db['self.start']
@@ -16,9 +16,9 @@ class Smart_train:
 
     def if_smart_train(self):
         while True:
-            smart_mark = input(f'是否一键读取上次信息？\n{self.date}\n起点：{self.start}\n'
+            smart_mark = input(f'是否一键读取上次信息？回车默认，按1重新录入：\n{self.date}\n起点：{self.start}\n'
                                f'终点：{self.end}\n车次：{self.train}\n时间段：{self.time_period}\n'
-                               f'姓名：{self.who}\n坐席：{self.seat}\n回车默认，按1重新录入：')
+                               f'姓名：{self.who}\n坐席：{self.seat}\n')
             if smart_mark == '':
                 return self
             elif smart_mark == '1':
@@ -38,7 +38,7 @@ class Smart_train:
                     "1：00:00--06:00\n"
                     "2：06:00--12:00\n"
                     "3：12:00--18:00\n"
-                    "4：18:00--24:00\n：")
+                    "4：18:00--24:00\n")
                 if time_period_mark == '1':
                     self.time_period = '00:00--06:00'
                 elif time_period_mark == '2':
@@ -52,7 +52,8 @@ class Smart_train:
                 self.train = input(f"哪（几）个车？多个用空格隔开（默认为{db['self.train']}）:")
                 self.who = input(f"谁坐呀？（默认{db['self.who']}）：")
                 self.seat = input(f"什么坐席？（默认{db['self.seat']}）：")
-                info_list = ['self.start', 'self.end', 'self.date', 'self.time_period', 'self.train', 'self.who', 'self.seat']
+                info_list = ['self.start', 'self.end', 'self.date', 'self.time_period', 'self.train', 'self.who',
+                             'self.seat']
                 count = 0
 
                 for i in info_list:
@@ -75,7 +76,12 @@ class Smart_train:
                     else:
                         db[i] = eval(i)
             flag = input(
-                f'准备开抢！看看信息对不对⬇\n{self.date}\n起点：{self.start}\n终点：{self.end}\n车次：{self.train}\n'
+                f'\n准备开抢！看看信息对不对⬇\n{self.date}\n起点：{self.start}\n终点：{self.end}\n车次：{self.train}\n'
                 f'时间段：{self.time_period}\n姓名：{self.who}\n坐席：{self.seat}\n对按1，不对别按1：')
             if flag == '1':
                 return self
+
+
+if __name__ == '__main__':
+    train_info = Train().if_smart_train()
+    print(train_info)
