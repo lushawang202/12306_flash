@@ -12,11 +12,11 @@ class Tool:
         with shelve.open('./info') as db:
             while True:
                 option = input(f"***请填写信息开始抢票（直接回车读取上次记录）***\n"
-                               f"您希望的抢票模式是(默认为{db['self.option']})：\n"
+                               f"\n您希望的抢票模式是（默认为{db['self.option']}）：\n"
                                "1：自动登录抢票模式\n"
-                               "0：手工登录调试模式"
-                               "（仅支持Chrome，请确认已打开Chrome并进入调试模式。打开方法：命令行进入chrome.exe所在目录，"
-                               "输入chrome --remote-debugging-port=9222，在浏览器中登录12306，登录成功保持浏览器打开即可。）\n")
+                               "0：手工登录调试模式\n"
+                               "注：调试模式仅支持Chrome，请确认已打开Chrome并进入调试模式。打开方法：命令行进入chrome.exe所在目录，"
+                               "输入chrome --remote-debugging-port=9222，在浏览器中登录12306，登录成功保持浏览器打开即可。\n")
                 if option == '1' or option == '0':
                     self.option = option
                     db['self.option'] = self.option
