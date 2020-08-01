@@ -2,13 +2,25 @@
 # -*- coding: utf-8 -*-
 from get_info.account import Account
 from get_info.browser import Browser
-from get_info.Smart_train import Smart_train
-from page.auto_login import Auto_Login
+from get_info.train import Train
 
 
 class Info_to_login:
     def __init__(self):
-        train_info = Smart_train().if_smart_train()
+        self.start = ''
+        self.end = ''
+        self.date = ''
+        self.train = ''
+        self.time_period = ''
+        self.who = ''
+        self.seat = ''
+        self._username = ''
+        self._password = ''
+        self._browser = ''
+
+    def get_train(self):
+        # get train info
+        train_info = Train().if_smart_train()
         self.start = train_info.start
         self.end = train_info.end
         self.date = train_info.date
@@ -16,15 +28,21 @@ class Info_to_login:
         self.time_period = train_info.time_period
         self.who = train_info.who
         self.seat = train_info.seat
-        self._username = None
-        self._password = None
+        return self
+
+    def get_browser(self):
+        # get browser info
         self._browser = Browser().choose_browser()
+        print('***请稍后，即将开始抢票！***')
+        return self
 
     def get_account(self):
+        # init account info
         get_account_info = Account().get_account_info()
         self._username = get_account_info.username
         self._password = get_account_info.password
         return self
 
-    def goto_login(self):
-        return Auto_Login(self._browser, self._username, self._password)
+
+if __name__ == '__main__':
+    Info_to_login().get_train().get_account().get_browser()
