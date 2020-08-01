@@ -20,7 +20,7 @@ class Info_to_login:
         self._username = get_account_info.username
         self._password = get_account_info.password
         self._browser = Browser().choose_browser()
+        print('请稍后，即将开始抢票！')
 
     def goto_login(self):
-        print('请稍后，即将开始抢票！')
         return Auto_Login(self._browser, self._username, self._password)
