@@ -38,7 +38,7 @@ class Info_to_login:
 
     def get_account(self):
         # init account info
-        get_account_info = Account().get_account_info()
+        get_account_info = Account().if_smart_account()
         self._username = get_account_info.username
         self._password = get_account_info.password
         return self
