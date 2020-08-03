@@ -7,16 +7,16 @@ import shelve
 class Account:
     def __init__(self):
         with shelve.open('./info') as db:
-            self.account_repeat = input(f'是否使用账号{db["self._username"]}登录？回车默认，按1重新录入：')
             self.username = db['self._username']
             self.password = db['self._password']
 
     def get_account_info(self):
         while True:
             with shelve.open('./info') as db:
-                if self.account_repeat == '':
+                account_repeat = input(f'是否使用账号{db["self._username"]}登录？回车默认，按1重新录入：\n')
+                if account_repeat == '':
                     return self
-                if self.account_repeat == '1':
+                if account_repeat == '1':
                     while True:
                         self.username = input("请输入12306账号：")
                         if self.username != '':
@@ -33,4 +33,10 @@ class Account:
                             print('密码不能为空')
                     return self
                 else:
-                    print("你很淘气哟")
+                    print("是想使用新账号吗？按1重新输入哦")
+
+
+if __name__ == '__main__':
+    account_info = Account().get_account_info()
+    print(account_info.username)
+    print(account_info.password)
