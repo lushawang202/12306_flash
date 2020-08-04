@@ -8,7 +8,7 @@ from get_info.browser import Browser
 from get_info.train import Train
 
 
-class Brush:
+class Utils:
     def __init__(self):
         self.start = ''
         self.end = ''
