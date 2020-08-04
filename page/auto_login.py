@@ -14,7 +14,7 @@ class Auto_Login(Base):
     _url = 'https://kyfw.12306.cn/otn/resources/login.html'
     _coordinate = [[-105, -20], [-35, -20], [40, -20], [110, -20], [-105, 50], [-35, 50], [40, 50], [110, 50]]
     with shelve.open('./info') as db:
-        def __init__(self, driver, username=db['self._username'], password=db['self._password']):
+        def __init__(self, driver, username, password):
             super().__init__(driver)
             self._username = username
             self._password = password

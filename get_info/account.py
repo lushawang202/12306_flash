@@ -22,8 +22,8 @@ class Account:
                     print("是想使用新账号吗？按1重新输入哦")
 
     def get_account_info(self):
-        while True:
-            with shelve.open('./info') as db:
+        with shelve.open('./info') as db:
+            while True:
                 self.username = input("请输入12306账号：")
                 if self.username != '':
                     db['self._username'] = self.username

@@ -10,10 +10,10 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 
 class Base:
-    _driver = None
+    _driver: WebDriver = None
     _url = ""
 
-    def __init__(self, driver: WebDriver = None):
+    def __init__(self, driver=None):
 
         if driver is None:
             options = Options()
